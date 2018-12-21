@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input id="sendText" type="text"/>
+<button id="wsSend">发送</button>
+<script>
+  // 初始化一个 WebSocket 对象
+  var ws = new WebSocket("ws://localhost:8001/");
+
+  function showMessage(msg) {
+    var div = document.createElement("div")
+    div.innerHTML = msg.msg
+    if (msg.type === "enter") {
+      div.style.color = "red"
+    } else if (msg.type === "left") {
+      div.style.color = "blue"
+    }
+    if (msg.type === "text") {
+      div.innerHTML = msg.name + ":" + msg.msg
+    }
+    document.body.appendChild(div)
+  }
+
+  // 建立 web socket 连接成功触发事件
+  ws.onopen = function () {
+    // 使用 send() 方法发送数据
+    document.getElementById("wsSend").onclick = function () {
+      var txt = document.getElementById("sendText").value;
+      if (txt) {
+        ws.send(txt)
+      }
+    }
+  };
+
+  // 接收服务端数据时触发事件
+  ws.onmessage = function (msg) {
+    var received_msg = JSON.parse(msg.data);
+    if (received_msg) {
+      showMessage(received_msg);
+    }
+  };
+
+  // 断开 web socket 连接成功触发事件
+  ws.onclose = function () {
+    alert("连接已关闭...");
+  };
+
+
+</script>
+</body>
+</html>

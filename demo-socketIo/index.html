@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<body>
+<input id="sendText" type="text"/>
+<button id="wsSend">发送</button>
+</body>
+<script>
+  var socket = io('ws://localhost:8001/');
+  socket.on('enter', function (data) {
+    console.log(data)
+    showMessage(data.name + ":进入了", "enter")
+  });
+  socket.on('leave', function (data) {
+    showMessage(data.name + ":离开了", "leave")
+  });
+  socket.on('message', function (data) {
+    showMessage(data.name + ":" + data.message, "text")
+  });
+
+  document.getElementById("wsSend").onclick = function () {
+    var txt = document.getElementById("sendText").value;
+    if (txt) {
+      socket.emit('message', txt)
+    }
+  }
+
+  function showMessage(msg, type) {
+    var div = document.createElement("div")
+    div.innerHTML = msg
+    if (type === "enter") {
+      div.style.color = "red"
+    } else if (type === "leave") {
+      div.style.color = "blue"
+    }
+    if (type === "text") {
+      div.innerHTML = msg
+    }
+    document.body.appendChild(div)
+  }
+</script>
+</html>
