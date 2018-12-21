@@ -60,7 +60,7 @@ export default class SocketTest extends React.Component<any, any> {
     } else {
       if (personName === item.data.name) {
         return (<div style={{overflow: "hidden"}}>
-          <MessagePop right={true}>
+          <MessagePop self={true}>
             <p className="message">{item.data.message}</p>
             <p className="name"><span>{item.data.name}</span></p>
           </MessagePop>
@@ -134,7 +134,7 @@ const Chatting = styled.div `
 
 const MessagePop = styled.div `
   overflow: hidden;
-  float:  ${props => props.right ? "right" : "left"};
+  float:  ${props => props.self ? "right" : "left"};
   .name {
     margin: 0;
     display: inline-block;
@@ -148,7 +148,7 @@ const MessagePop = styled.div `
      display: inline-block;
      padding: 2px 8px;
      border-radius: 4px;
-     background: #c6eeff;
+     background: ${props => props.self ? "#c6eeff" : "#ddd"};
   }
 `;
 
