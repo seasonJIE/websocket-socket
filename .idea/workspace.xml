@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="43b63742-6d5c-4984-8577-de80d7cdba2d" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/demo-socketIo/js/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo-socketIo/js/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo4/js/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo4/js/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/Socket.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/Socket.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="43b63742-6d5c-4984-8577-de80d7cdba2d" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
