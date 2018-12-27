@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import {Input} from "antd"
 
 const {Search} = Input
-// const socket = io('ws://localhost:8001/');
-const socket = io('ws://192.168.50.97:8001/');
+const socket = io('ws://localhost:8001/');
+// const socket = io('ws://192.168.50.97:8001/');
 
 export default class SocketTest extends React.Component<any, any> {
   constructor(props: any) {
@@ -25,14 +25,14 @@ export default class SocketTest extends React.Component<any, any> {
     socket.on('enter', (data) => {
       this.showMessage(data, "enter")
     });
-    socket.on('enterSelf', (data) => {
-      this.setState({personName: data.name})
-    });
     socket.on('message', (data) => {
       this.showMessage(data, "message")
     });
     socket.on('leave', (data) => {
       this.showMessage(data, "leave")
+    });
+    socket.on('enterSelf', (data) => {
+      this.setState({personName: data.name})
     });
   }
 

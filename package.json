@@ -54,7 +54,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --hot --host 0.0.0.0",
-    "server": "node ./demo-socketIo/js/server.js"
+    "server": "node ./demo-socketIo/js/server.js",
+    "websocketServer": "node ./demo4/js/server.js"
+
   },
   "author": "陈仁杰",
   "license": "ISC"
