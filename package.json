@@ -9,6 +9,7 @@
     "@types/react": "^16.4.13",
     "@types/react-dom": "^16.0.7",
     "@types/react-router": "^4.0.30",
+    "@types/rx": "^4.1.1",
     "babel-loader": "^8.0.2",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-import": "^1.8.0",
@@ -48,6 +49,7 @@
     "nodejs-websocket": "^1.7.2",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "rxjs": "^6.3.3",
     "socket.io": "^2.2.0",
     "styled-components": "^4.1.3"
   },
@@ -56,7 +58,6 @@
     "start": "webpack-dev-server --hot --host 0.0.0.0",
     "server": "node ./demo-socketIo/js/server.js",
     "websocketServer": "node ./demo4/js/server.js"
-
   },
   "author": "陈仁杰",
   "license": "ISC"

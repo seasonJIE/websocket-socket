@@ -3,13 +3,16 @@ import io from "socket.io-client"
 import _ from "lodash"
 import styled from 'styled-components'
 import {Input} from "antd"
+import {ChatService} from "./Service"
 
 const {Search} = Input
 // const socket = io('ws://192.168.50.97:8001/');
 
-export default class Socket extends React.Component<any, any> {
+export default class RxJsSocket extends React.Component<any, any> {
   refs: { messageBox: any }
-  socket:io
+  private socket: io
+  private chatService: ChatService
+
   constructor(props: any) {
     super(props)
     this.state = {
@@ -23,25 +26,19 @@ export default class Socket extends React.Component<any, any> {
   }
 
   initSocket = () => {
-    this.socket = io('ws://localhost:8001/');
-
-    this.socket.on('enter', (data) => {
-      this.showMessage(data, "enter")
-    });
-    this.socket.on('message', (data) => {
-      this.showMessage(data, "message")
-    });
-    this.socket.on('leave', (data) => {
-      this.showMessage(data, "leave")
-    });
-    this.socket.on('enterSelf', (data) => {
-      this.setState({personName: data.name})
-    });
+    this.chatService = new ChatService()
+    this.chatService.getMessages().subscribe((data) => {
+      this.showMessage(data.data, data.type)
+    })
   }
 
   showMessage = (data, type) => {
     const {messageBox} = this.state
-    messageBox.push({data, type})
+    if(type!=="enterSelf"){
+      messageBox.push({data, type})
+    }else {
+      this.setState({personName: data.name})
+    }
     this.setState({messageBox}, () => {
       this.refs.messageBox.scrollTop = this.refs.messageBox.scrollHeight
     })
@@ -49,12 +46,12 @@ export default class Socket extends React.Component<any, any> {
 
   send = (inputText) => {
     if (inputText) {
-      this.socket.emit('message', inputText);
+      this.chatService.sendMessage(inputText)
       this.setState({sendValue: null})
     }
   }
 
-  renderMessage = (item,index) => {
+  renderMessage = (item, index) => {
     const {personName} = this.state
     if (item.type !== "message") {
       return (<TipsPop key={index}>
@@ -81,8 +78,8 @@ export default class Socket extends React.Component<any, any> {
   renderMessageBox = (messageBox) => {
     return (
       <div ref="messageBox" className="messageBox">
-        {_.map(messageBox, (item,index) => {
-          return this.renderMessage(item,index)
+        {_.map(messageBox, (item, index) => {
+          return this.renderMessage(item, index)
         })}
       </div>
     )
