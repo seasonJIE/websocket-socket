@@ -2,13 +2,20 @@ import * as React from "react";
 import _ from "lodash"
 import styled from 'styled-components'
 import {Input} from "antd"
+import {webSocket} from "rxjs/webSocket"
+
 import {ChatService} from "./Service"
 
-const {Search} = Input
 
-export default class RxJsSocket extends React.Component<any, any> {
+const {Search} = Input
+// const socket = io('ws://192.168.50.97:8001/');
+// const ws = new WebSocket("ws://localhost:8001/");
+
+export default class Socket extends React.Component<any, any> {
   refs: { messageBox: any }
-  private chatService: ChatService
+  // chatService: ChatService
+  ws: any;
+  subject: any
 
   constructor(props: any) {
     super(props)
@@ -18,16 +25,25 @@ export default class RxJsSocket extends React.Component<any, any> {
     }
   }
 
-  componentDidMount() {
-    this.initSocket()
+  componentWillMount() {
+    this.initChart()
   }
 
-  initSocket = () => {
-    this.chatService = new ChatService()
-    this.chatService.subject.subscribe((data) => {
-      this.showMessage(data.data, data.type)
-    })
-    this.chatService.getMessages().subscribe(this.chatService.subject)
+  initChart = () => {
+    // this.chatService = new ChatService()
+    // this.chatService.subject.subscribe((data) => {
+    //   this.showMessage(data.data, data.type)
+    // })
+    // this.chatService.getMessages().subscribe(this.chatService.subject)
+
+    this.ws = webSocket("ws://localhost:8001/");
+    this.subject = this.ws.subscribe(res => {
+      this.showMessage(res, res.type)
+    });
+    this.ws.onclose = function () {
+    };
+
+
   }
 
   showMessage = (data, type) => {
@@ -44,29 +60,30 @@ export default class RxJsSocket extends React.Component<any, any> {
 
   send = (inputText) => {
     if (inputText) {
-      this.chatService.sendMessage(inputText)
+      // this.chatService.sendMessage(inputText)
+      this.ws.next(inputText)
       this.setState({sendValue: null})
     }
   }
 
   renderMessage = (item, index) => {
     const {personName} = this.state
-    if (item.type !== "message") {
+    if (item.type !== "text") {
       return (<TipsPop key={index}>
-        <span>{item.data.name}</span>{item.type === "leave" ? "离开了" : "进入了"}
+        <span>{item.data.msg}</span>
       </TipsPop>)
     } else {
       if (personName === item.data.name) {
         return (<div style={{overflow: "hidden"}} key={index}>
           <MessagePop self={true}>
-            <p className="message">{item.data.message}</p>
+            <p className="message">{item.data.msg}</p>
             <p className="name"><span>{item.data.name}</span></p>
           </MessagePop>
         </div>)
       }
       return (<div style={{overflow: "hidden"}} key={index}>
         <MessagePop>
-          <p className="message">{item.data.message}</p>
+          <p className="message">{item.data.msg}</p>
           <p className="name"><span>{item.data.name}</span></p>
         </MessagePop>
       </div>)
@@ -83,13 +100,20 @@ export default class RxJsSocket extends React.Component<any, any> {
     )
   }
 
+  reConnect = () => {
+    this.subject = this.ws.subscribe(res => {
+      this.showMessage(res, res.type)
+    });
+    // this.chatService.getMessages().subscribe(this.chatService.subject)
+
+  }
+
   render() {
     const {messageBox} = this.state
 
-
     return (<div style={{overflow: "hidden"}}>
         <Chatting>
-          <p className="title">J聊天室</p>
+          <p className="title">J聊天室<a onClick={this.reConnect}>重连</a></p>
           {this.renderMessageBox(messageBox)}
           <Search
             placeholder="请输入要发送的消息"
@@ -98,6 +122,7 @@ export default class RxJsSocket extends React.Component<any, any> {
             onChange={(e) => this.setState({sendValue: e.target.value})}
             onSearch={value => this.send(value)}
           />
+
         </Chatting>
       </div>
     )

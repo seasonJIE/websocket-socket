@@ -9,7 +9,7 @@
 <button id="wsSend">发送</button>
 </body>
 <script>
-  var socket = io('ws://localhost:8001/');
+  var socket = io('ws://172.108.0.42:8001/');
   socket.on('enter', function (data) {
     console.log(data)
     showMessage(data.name + ":进入了", "enter")
